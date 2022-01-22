@@ -14,7 +14,7 @@ db.once('open', () => console.log('Connected to mongoose'));
 // const bodyParser = require('body-parser');
 
 const indexRoute = require('./routes/index');
-const authorRoute = require('./routes/authors');
+const movieRoute = require('./routes/movies');
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use('/', indexRoute);
-app.use('/authors', authorRoute);
+app.use('/authors', movieRoute);
 // app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
 
 app.listen(process.env.PORT || 3000);
