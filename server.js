@@ -11,9 +11,8 @@ const db = mongoose.connection;
 db.on('error', error => console.log(error));
 db.once('open', () => console.log('Connected to mongoose'));
 
-// const bodyParser = require('body-parser');
-
 const indexRoute = require('./routes/index');
+const directorRoute = require('./routes/directors');
 const movieRoute = require('./routes/movies');
 
 app.set('view engine', 'ejs');
@@ -24,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use('/', indexRoute);
+app.use('/directors', directorRoute);
 app.use('/movies', movieRoute);
 app.listen(process.env.PORT || 3000);
 
