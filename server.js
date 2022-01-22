@@ -24,6 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use('/', indexRoute);
-app.use('/authors', movieRoute);
+app.use('/movies', movieRoute);
 app.listen(process.env.PORT || 3000);
 
