@@ -25,7 +25,5 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/', indexRoute);
 app.use('/authors', movieRoute);
-// app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
-
 app.listen(process.env.PORT || 3000);
 
