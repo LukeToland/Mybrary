@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+const path = require('path');
 
 const posterImageBasePath = 'uploads/moviePosters';
 
-const movie2Schema = new mongoose.Schema({
+const movieSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -23,7 +24,7 @@ const movie2Schema = new mongoose.Schema({
         required: true,
         default: Date.now()
     },
-    posterImage: {
+    posterImageName: {
         type: String,
         required: true
     },
@@ -34,5 +35,11 @@ const movie2Schema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Movie2', movie2Schema);
+movieSchema.virtual('posterImagePath').get(function () {
+    if (this.posterImageName != null) {
+        return path.join('/', posterImageBasePath, this.posterImageName)
+    }
+})
+
+module.exports = mongoose.model('MovieNew', movieSchema);
 module.exports.posterImageBasePath = posterImageBasePath;

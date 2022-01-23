@@ -1,6 +1,6 @@
 <div>
   <label>Name</label>
-  <input type="text" name="title" value="<%=movie.title%>" />
+  <input type="text" name="title" value="<%= movie.title %>" />
 </div>
 <div>
   <label>Director</label>
@@ -8,22 +8,22 @@
     <% directors.forEach(director =>{%> <% if(director.id == movie.director){ %>
     <option
       selected
-      label="<%=director.name%>"
-      value="<%=director.id%>"
+      label="<%=director.name %>"
+      value="<%= director.id %>"
     ></option>
     <% } else { %>
-    <option label="<%=director.name%>" value="<%=director.id%>"></option>
+    <option label="<%=director.name%>" value="<%= director.id %>"></option>
     <% }}) %>
   </select>
 </div>
 <div>
   <label>Release Date</label>
-  <input type="date" name="releaseDate" value="<%=movie.releaseDate == null ? ""
-  : movie.releaseDate.toISOString().split('T')[0]%>" />
+  <input type="date" name="releaseDate" value="<%= movie.releaseDate == null ?
+  "" : movie.releaseDate.toISOString().split('T')[0] %>" />
 </div>
 <div>
   <label>Run Time(minutes)</label>
-  <input type="number" name="runTime" min="1" value="<%=movie.runTime%>" />
+  <input type="number" name="runTime" min="1" value="<%= movie.runTime %>" />
 </div>
 <div>
   <label>Poster</label>
@@ -31,5 +31,5 @@
 </div>
 <div>
   <label>Description</label>
-  <textarea name="description"><%=movie.description%></textarea>
+  <textarea name="description"><%= movie.description %></textarea>
 </div>
