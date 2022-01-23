@@ -1,8 +1,8 @@
 const { builtinModules } = require('module');
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+// const multer = require('multer');
+// const path = require('path');
+// const fs = require('fs');
 
 const router = express.Router();
 const Director = require('../models/director');
@@ -10,13 +10,13 @@ const Movie = require('../models/movie');
 
 //File upload setup
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
-const uploadPath = path.join('public', Movie.posterImageBasePath);
-const upload = multer({
-    dest: uploadPath,
-    fileFilter: (req, file, callback) => {
-        callback(null, imageMimeTypes.includes(file.mimetype))
-    }
-});
+// const uploadPath = path.join('public', Movie.posterImageBasePath);
+// const upload = multer({
+//     dest: uploadPath,
+//     fileFilter: (req, file, callback) => {
+//         callback(null, imageMimeTypes.includes(file.mimetype))
+//     }
+// });
 
 //All movies route
 router.get('/', async (req, res) => {
@@ -50,32 +50,33 @@ router.get('/new', async (req, res) => {
 })
 
 //Create a new movie
-router.post('/', upload.single('poster'), async (req, res) => {
+router.post('/', async (req, res) => {
     const fileName = req.file != null ? req.file.filename : null;
     const movie = new Movie({
         title: req.body.title,
         director: req.body.director,
         releaseDate: new Date(req.body.releaseDate),
         runTime: req.body.runTime,
-        description: req.body.description,
-        posterImageName: fileName
+        description: req.body.description
     });
+
+    savePoster(movie, req.body.poster);
 
     try {
         const newMovie = await movie.save();
         res.redirect(`movies`);
     } catch (err) {
-        if (movie.posterImageName) removeMoviePoster(movie.posterImageName);
+        // if (movie.posterImageName) removeMoviePoster(movie.posterImageName);
         renderNewPage(res, movie, true);
         //console.log(err);
     }
 })
 
-function removeMoviePoster(posterImageName) {
-    fs.unlink(path.join(uploadPath, posterImageName), err => {
-        if (err) console.error(err);
-    });
-}
+// function removeMoviePoster(posterImageName) {
+//     fs.unlink(path.join(uploadPath, posterImageName), err => {
+//         if (err) console.error(err);
+//     });
+// }
 
 async function renderNewPage(res, movie, hasError = false) {
     try {
@@ -89,6 +90,16 @@ async function renderNewPage(res, movie, hasError = false) {
         res.render('movies/new', params);
     } catch (err) {
         res.redirect('/movies');
+    }
+}
+
+function savePoster(movie, coverEncoded) {
+    if (coverEncoded == null) return;
+
+    const poster = JSON.parse(coverEncoded);
+    if (poster && imageMimeTypes.includes(poster.type)) {
+        movie.posterImage = new Buffer.from(poster.data, 'base64');
+        movie.posterImageType = poster.type;
     }
 }
 
